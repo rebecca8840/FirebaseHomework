@@ -48,7 +48,7 @@
   </div>
 
 	<div class="card-body">
-		<table class="table table-hover" id='employeeTable'>
+		<table class="table table-hover" id='trainTable'>
 			<thead>
 				<tr>
 					<th>Train Name</th>
@@ -105,7 +105,7 @@
 
     <label for="trainTime-input" id="trainTime">First Train Time (Military Time)</label>
 
-    <input type="date" class="form-control" id="trainTime-input">
+    <input type="text" class="form-control" id="trainTime-input">
 
   </div>
 
@@ -143,7 +143,10 @@
   firebase.initializeApp(config);
 </script>
 
-  <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+ <script
+
+ src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+ crossorigin="anonymous"></script>
 
   <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 

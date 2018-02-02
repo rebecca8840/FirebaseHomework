@@ -17,6 +17,8 @@ $("#addTrain").on("click", function(){
 		r_createDate: firebase.database.ServerValue.TIMESTAMP
 	}
 
+	var database = firebase.database();
+
 	// upload input data into db
 
 	database.ref().push(train);
@@ -31,14 +33,36 @@ $("#addTrain").on("click", function(){
 	return false;
 });
 
+// Assumptions
+    var tFrequency = 75;
 
-function monthDiff(d1, d2) {
-   var months;
-   months = (d2.getFullYear() - d1.getFullYear()) * 12;
-   months -= d1.getMonth() + 1;
-   months += d2.getMonth();
-   return months <= 0 ? 0 : months;
-}
+    // Time is 3:30 AM
+    var firstTime = "03:30";
+
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % tFrequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var tMinutesTillTrain = tFrequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+  
 
 	database.ref().on("child_added", function(childSnapshot, prevChildKey){
 
@@ -51,24 +75,8 @@ function monthDiff(d1, d2) {
 	var Frequency = childSnapshot.val().Frequency;
 
 
-	//calculate the number of months difference between now() and startDate
-	var empDate = new Date(employeeStart);
-
-
-    var myDate = new Date();
-
-
-    var employeeMonths = monthDiff(empDate,myDate);
-
-	
-	//calculate the months worked (now()-start date) * rate = totalBIlled
-
-	var totalBilled = (employeeMonths * employeeRate);
-
-
-
 	//write fields to html
 
-$("#employeeTable > tbody").append("<tr><td>" + employeeName + "</td><td>" + employeeRole + "</td><td>" + employeeStart + "</td><td>" + employeeMonths + "</td><td>" + employeeRate + "</td><td>" + totalBilled + "</td></tr>");
+$("#trainTable > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +  trainTime + "</td><td>" + frequency + "</td><td>");
 
 });	//catch false input
