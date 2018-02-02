@@ -1,0 +1,17 @@
+body {
+	background-image: url("../css/seigaiha.png");
+}
+
+.cardHeader {
+	background-color: #4db6ac;
+	color: white;
+}
+
+#addTrain {
+	background-color: #4db6ac;
+	color: white;
+}
+
+#newTrainCard {
+	background-color: white;
+}
