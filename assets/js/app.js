@@ -1,4 +1,4 @@
-
+$( document ).ready() 
 
 $("#addTrain").on("click", function(){
 
@@ -7,8 +7,12 @@ $("#addTrain").on("click", function(){
 	var trainTime = $("#trainTime-input").val().trim();
 	var frequency = $("#frequency-input").val().trim();
 
-	// value fields for db
-	
+
+	var database = firebase.database();
+
+
+	$("#addTrain").on("click", function() {
+
 	var train = {
 		Name: trainName,
 		Destination: destination,		
@@ -17,66 +21,43 @@ $("#addTrain").on("click", function(){
 		r_createDate: firebase.database.ServerValue.TIMESTAMP
 	}
 
-	var database = firebase.database();
-
-	// upload input data into db
-
 	database.ref().push(train);
 
-	// Clears all of the text-boxes
+
 	$("#trainName-input").val("");
 	$("#destination-input").val("");
 	$("#trainTime-input").val("");
 	$("#frequency-input").val("");
 
-	// Prevents moving to new page
 	return false;
 });
-
-// Assumptions
-    var tFrequency = 75;
-
-    // Time is 3:30 AM
-    var firstTime = "03:30";
-
-    // First Time (pushed back 1 year to make sure it comes before current time)
-    var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
-    console.log(firstTimeConverted);
-
-    // Current Time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-
-    // Difference between the times
-    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
-
-    // Time apart (remainder)
-    var tRemainder = diffTime % tFrequency;
-    console.log(tRemainder);
-
-    // Minute Until Train
-    var tMinutesTillTrain = tFrequency - tRemainder;
-    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-
-    // Next Train
-    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
-  
 
 	database.ref().on("child_added", function(childSnapshot, prevChildKey){
 
 	console.log(childSnapshot.val());
 
-	// Store everything into a variable.
+
 	var trainName = childSnapshot.val().Name;
 	var destination = childSnapshot.val().Destination;
 	var trainTime = childSnapshot.val().FirstTrainTime;
 	var Frequency = childSnapshot.val().Frequency;
 
+    var tFrequency = 30;
 
-	//write fields to html
+    var firstTimeConverted = moment(trainTime, "hh:mm")
+
+    var currentTime = moment();
+
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+
+    var tRemainder = diffTime % tFrequency;
+
+    var tMinutesTillTrain = tFrequency - tRemainder;
+
+
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+  
 
 $("#trainTable > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +  trainTime + "</td><td>" + frequency + "</td><td>");
 
-});	//catch false input
+});	
