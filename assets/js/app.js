@@ -4,10 +4,10 @@ $("#addTrain").on("click", function(){
 
 	var trainName = $("#trainName-input").val().trim();
 	var destination = $("#destination-input").val().trim();
-	var trainTime = $("#trainTime-input").val().trim();
+ 	var firstTrain = moment($("#trainTime-input").val().trim(), "HH:mm").format("HH:mm");
 	var frequency = $("#frequency-input").val().trim();
 
-
+ 
 	var database = firebase.database();
 
 
@@ -42,22 +42,18 @@ $("#addTrain").on("click", function(){
 	var trainTime = childSnapshot.val().FirstTrainTime;
 	var Frequency = childSnapshot.val().Frequency;
 
-    var tFrequency = 30;
+    var firstTimeConverted = moment(firstTrain, "hh:mm")
 
-    var firstTimeConverted = moment(trainTime, "hh:mm")
-
-    var currentTime = moment();
+    var currentTime = moment().format("HH:mm");
 
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
 
     var tRemainder = diffTime % tFrequency;
 
-    var tMinutesTillTrain = tFrequency - tRemainder;
-
-
-    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    var MinutesTillTrain = Frequency - tRemainder;
   
 
 $("#trainTable > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +  trainTime + "</td><td>" + frequency + "</td><td>");
+});
 
 });	
